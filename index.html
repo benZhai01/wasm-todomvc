@@ -4,9 +4,30 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
+    <link href="./styles.css" rel="stylesheet" />
 </head>
 <body>
-    
+    <h1>todos</h1>
+    <div id="todo_app" class="app">
+        <section class="main">
+            <div class="task_input">
+                <div class="toggle" data-active='false'><span>❯<span></div>
+                <input class='task_editor' placeholder="What needs to be done?"/>
+            </div>
+            <div class='list' data-selected="all">
+                
+            </div>
+        </section>
+        <section class="footer">
+            <span class="task_count">{} items left</span>
+            <div class="filter_type">
+                <span data-active='true' data-type='all'>All</span>
+                <span data-type='active'>Active</span>
+                <span data-type='completed'>Completed</span>
+            </div>
+            <span class="action">Clear completed</span>
+        </section>
+    </div>
     <div id="log_panel"></div>
     <script>
         window.log = function(str) {
