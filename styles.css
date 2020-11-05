@@ -94,10 +94,37 @@ h1 {
     right: 10px;
 }
 
-.list-item label {
+.list-item .title_area{
+    height: 100%;
     flex: auto;
     overflow: hidden;
+    display: flex;
+    align-items: center;
+    position: relative;
+}
+
+.list-item label {
+    overflow: hidden;
     text-overflow: ellipsis;
+    font-size: 1.5em;
+}
+
+.list-item .title_modify-input{
+    display: block;
+    position: absolute;
+    left: 0;
+    bottom: 0;
+    right: 0;
+    top: 0;
+    outline: none;
+    width: 100%;
+    box-sizing: border-box;
+    z-index: 1;
+    font-size: 1.5em;
+}
+
+.list-item .title_modify-input[data-show='false']{
+    display: none;
 }
 
 .list-item:hover .clear_item {

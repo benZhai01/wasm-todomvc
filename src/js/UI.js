@@ -69,6 +69,7 @@ export class UI {
                 let item = this.items.find(i => i.id == id);
                 item.completed = e.target.checked;
                 this.model.upsert(item);
+                this.completedAll = undefined;
             }else if(e.target.tagName == 'SPAN'){
                 let id = e.target.parentElement.parentElement.dataset.id;
                 this.model.delete(id);
@@ -99,12 +100,38 @@ export class UI {
         <div class="check-box">
             <input type='checkbox'/>
         </div>
-        <label></label>
+        <div class="title_area">
+            <label></label>
+            <input data-show="false" class="title_modify-input"/>
+        </div>
         <div class="clear_item">
             <span>×</span>
         </div>`;
         div.querySelector('input').checked = item.completed;
         div.querySelector('label').innerText = item.title;
+        div.querySelector('.title_area').addEventListener('dblclick', (e) => {
+            e.preventDefault();
+            let title_input = div.querySelector('.title_modify-input');
+            title_input.dataset.show = true;
+            title_input.value = item.title;
+            title_input.focus();
+            let focus_out = () => {
+                title_input.dataset.show = false;
+                title_input.removeEventListener('keydown', keydown);
+                title_input.removeEventListener('focusout', focus_out)
+            };
+            let keydown = (e) => {
+                if(e.keyCode == 13){
+                    item.title = title_input.value;
+                    this.model.upsert(item);
+                    focus_out();
+                }else if(e.keyCode == 27){
+                    focus_out();
+                }
+            }
+            title_input.addEventListener('keydown', keydown);
+            title_input.addEventListener('focusout', focus_out);
+        })
         return div;
     }
 
@@ -123,7 +150,9 @@ export class UI {
                 break;
             case 'update':
                 let id = args.detail.item.id;
-                this.list_wrapper.querySelector(`[data-id="${id}"]`).dataset.completed = args.detail.item.completed;
+                let list_item = this.list_wrapper.querySelector(`[data-id="${id}"]`);
+                list_item.dataset.completed = args.detail.item.completed;
+                list_item.querySelector('label').innerText = args.detail.item.title;
                 break;
             case 'delete':
                 let node = this.list_wrapper.querySelector(`[data-id="${args.detail.item.id}"]`);
